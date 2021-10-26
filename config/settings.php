@@ -1,21 +1,34 @@
 <?php
 use \Psr\Container\ContainerInterface;
 
-// Should be set to 0 in production
-error_reporting(E_ALL);
-
-// Should be set to '0' in production
-ini_set('display_errors', '1');
-
 // Timezone
 date_default_timezone_set('Europe/Paris');
 
+if($_ENV['ENV'] === 'DEV') {
+    error_reporting(E_ALL);
+    ini_set('display_errors', '1');
+    $bool = true;
+}
+else {
+    error_reporting(0);
+    ini_set('display_errors', '0');
+    $bool = false;
+}
+
+
 return function (ContainerInterface $container) {
     $container->set('settings', function () {
+        if($_ENV['ENV'] === 'DEV') {
+            $bool = true;
+        }
+        else {
+            $bool = false;
+        }
+
         return [
-            'displayErrorDetails' => true,
-            'logErrorDetails' => true,
-            'logErrors' => true,
+            'displayErrorDetails' => $bool,
+            'logErrorDetails' => $bool,
+            'logErrors' => $bool,
         ];
     });
 };

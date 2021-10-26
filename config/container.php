@@ -1,6 +1,5 @@
 <?php
 use Psr\Container\ContainerInterface;
-use Slim\App;
 
 return function (ContainerInterface $container) {
     //empty
