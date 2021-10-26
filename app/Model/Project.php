@@ -15,12 +15,28 @@ final class Project {
     }
 
     public function getAllProject() {
-        $query = 'SELECT * FROM Project;';
+        $query = "SELECT * FROM $this->table;";
 
-        return $this->connection->query($query);
+        $response = $this->connection->query($query);
+
+        $array = [];
+
+        while($data = $response->fetch())
+        {
+            array_push($array, $data);
+        }
+        $response->closeCursor();
+        return $array;
     }
 
-    public function getOneProjectById() {
+    public function getOneProjectById(INT $id) {
+        $query = "SELECT * FROM $this->table WHERE id=:id;";
+        $request = $this->connection->prepare($query);
 
+        $request->execute([
+            'id' => $id,
+        ]);
+
+        return $request->fetch();
     }
 }

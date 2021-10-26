@@ -5,6 +5,8 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
 use Slim\Views\Twig;
 use Slim\Routing\RouteCollectorProxy;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 return function (App $app) {
     
@@ -15,7 +17,15 @@ return function (App $app) {
     $app->group('/api', function(RouteCollectorProxy $api) {
         $api->group('/project', function(RouteCollectorProxy $project) {
             $project->get('/', [\App\Controller\Api\ProjectController::class, 'allProject']);
-            $project->get('/{id}', [\App\Controller\Api\ProjectController::class, 'oneProject']);
+
+            $project->options('/', function (
+                ServerRequestInterface $request, 
+                ResponseInterface $response
+            ): ResponseInterface {
+                return $response;
+            });
+
+            $project->get('/{id}/', [\App\Controller\Api\ProjectController::class, 'oneProject']);
         });
     });
 };
