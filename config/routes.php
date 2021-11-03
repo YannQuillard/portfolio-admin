@@ -1,10 +1,11 @@
 <?php
 use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 
 return function (App $app) {
+    $app->options('/{routes:.+}', function ($request, $response, $args) {
+        return $response;
+    });
     
     $app->get('/', function ($request, $response, $args) {
         return $this->get('view')->render($response, 'app.twig');
